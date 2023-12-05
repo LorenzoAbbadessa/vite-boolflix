@@ -3,6 +3,13 @@
 import { store } from './components/store.js'
 import axios from 'axios';
 
+export default {
+  data() {
+    return {
+      store,
+    }
+  },
+}
 const options = {
   method: 'GET',
   url: 'https://api.themoviedb.org/3/authentication',
@@ -26,8 +33,8 @@ axios
 
 
 <template>
-  <input type="text" placeholder="cerca">
-  <button>VAI!</button>
+  <input type="text" placeholder="search" v-model="store.searchText" @keyup.enter="$emit('GET')">
+  <button>GO!</button>
 </template>
 
 
