@@ -1,42 +1,56 @@
 <script>
-
-import { store } from './components/store.js'
 import axios from 'axios';
-
+import { store } from './store.js'
+import centro from './components/main.vue';
+import testa from './components/header.vue';
 export default {
-  data() {
-    return {
-      store,
+    components: {
+        testa,
+        centro,
+    },
+    data() {
+        return {
+            store
+        }
+    },
+
+
+    methods: {
+        getInfoOld() {
+            const call = `${store.api_url}?api_key=${store.api_key}&query=${store.search}`;
+
+            axios.get(call).then(res => {
+                this.store.container = res.data.results
+
+
+
+            })
+
+        },
+        getInfo() {
+
+
+            const options = {
+                method: 'GET',
+                url: this.store.api_url,
+                params: {
+                    query: this.store.search,
+                    api_key: this.store.api_key
+                }
+            };
+
+            axios.request(options).then(response => {
+                this.store.container = response.data.results
+            })
+        }
     }
-  },
 }
-const options = {
-  method: 'GET',
-  url: 'https://api.themoviedb.org/3/authentication',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2N2I0ZDM1ZmRiZThjNzQ0ZjlhZjhhYWE0Y2M0MDMyZSIsInN1YiI6IjY1NmRkY2JlM2RjMzEzMDBlMWVlOTdiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.k1By06hgxySVaizPmjXAkNlNBLe6Fctpai_fwoc-avA'
-  }
-};
-
-axios
-  .request(options)
-  .then(function (response) {
-    console.log(response.data);
-  })
-  .catch(function (error) {
-    console.error(error);
-  });
-
 </script>
 
 
-
 <template>
-  <input type="text" placeholder="search" v-model="store.searchText" @keyup.enter="$emit('GET')">
-  <button>GO!</button>
+    <testa @search="getInfo" />
+    <centro />
 </template>
-
-
 
 <style scoped></style>
